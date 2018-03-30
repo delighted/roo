@@ -305,7 +305,7 @@
 
 ## [1.0.1] - 2008-06-30
 ### Fixed
-- Excel: row/column method Fixnum/Float confusion
+- Excel: row/column method Integer/Float confusion
 
 ## [1.0.0] - 2008-05-28
 ### Changed / Added
