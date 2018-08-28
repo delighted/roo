@@ -649,10 +649,17 @@ class Roo::Base
   def process_zipfile_packed(zip, tmpdir, path = '')
     if zip.file.file? path
       # extract and return filename
-      File.open(File.join(tmpdir, path), 'wb') do |file|
+      dest_path = File.join(tmpdir, path)
+
+      # XXX Temporary mitigation for https://github.com/rubyzip/rubyzip/issues/369
+      allowed_base_dir = Pathname.new(Dir.tmpdir).expand_path.to_s
+      is_safe_dest_path = Pathname.new(dest_path).expand_path.to_s.start_with?(allowed_base_dir)
+      raise "unsafe dest_path: #{dest_path.inspect}" unless is_safe_dest_path 
+
+      File.open(dest_path, 'wb') do |file|
         file.write(zip.read(path))
       end
-      File.join(tmpdir, path)
+      dest_path
     else
       ret = nil
       path += '/' unless path.empty?
